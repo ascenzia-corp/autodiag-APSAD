@@ -3,7 +3,7 @@ import {
   Download,
   RefreshCw,
   Calendar,
-  Building2,
+  Mail,
   FileText,
 } from 'lucide-react';
 import {
@@ -67,13 +67,11 @@ export function ResultsStep({
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
-              <div className="w-6 h-6 bg-primary rounded-r-full" />
-              <span className="text-sm font-bold text-foreground">PERIN</span>
-            </div>
-            <span className="text-xs text-primary font-semibold">Sécurité</span>
-          </div>
+          <img
+            src="/logo-perin.svg"
+            alt="Groupe Perin Sécurité"
+            className="h-10 w-auto"
+          />
           <Badge variant="outline">
             Catégorie APSAD : {apsadCategory}
           </Badge>
@@ -168,14 +166,15 @@ export function ResultsStep({
             description="15 minutes sans engagement pour approfondir votre diagnostic."
             buttonText="Prendre rendez-vous"
             buttonVariant="primary"
-            href="https://calendly.com/groupe-perin/diagnostic-apsad"
+            href="https://meetings-eu1.hubspot.com/laurent-tellotte"
           />
           <CTACard
-            icon={Building2}
-            title="Audit approfondi APSAD"
-            description="Identifiez précisément les écarts techniques et normatifs."
-            buttonText="Demander un devis"
+            icon={Mail}
+            title="Demander un devis"
+            description="Recevez une proposition personnalisée pour votre audit APSAD."
+            buttonText="Nous contacter"
             buttonVariant="outline"
+            href="mailto:ltellotte@perin.fr?subject=Demande de devis - Autodiagnostic APSAD"
           />
         </motion.div>
 

@@ -11,21 +11,11 @@ export function DiagnosticHeader({ progress, showProgress = true }: DiagnosticHe
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="flex items-center">
-              {/* Simplified Perin logo representation */}
-              <div className="flex items-center gap-1">
-                <div className="w-8 h-8 bg-primary rounded-r-full" />
-                <div className="flex flex-col leading-none">
-                  <span className="text-xs font-bold text-muted tracking-wider">GROUPE</span>
-                  <span className="text-lg font-bold text-foreground tracking-tight">PERIN</span>
-                </div>
-              </div>
-            </div>
-            <span className="hidden sm:inline-block text-xs font-semibold text-primary uppercase tracking-wide ml-2">
-              Sécurité
-            </span>
-          </div>
+          <img
+            src="/logo-perin.svg"
+            alt="Groupe Perin Sécurité"
+            className="h-10 w-auto"
+          />
 
           {/* Right side - can add info or menu */}
           <div className="text-sm text-muted">
