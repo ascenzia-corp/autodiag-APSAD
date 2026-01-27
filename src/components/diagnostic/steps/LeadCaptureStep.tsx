@@ -6,7 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button, Card, Input, Select, Checkbox } from '../ui';
 import { SecurityRadarChart } from '../ui/RadarChart';
-import type { LeadData, AxisScore } from '@/types/diagnostic';
+import { submitToHubSpot } from '@/lib/hubspot';
+import type { LeadData, AxisScore, UserContext, ScoreLevel } from '@/types/diagnostic';
 
 const leadSchema = z.object({
   firstName: z.string().min(2, 'Prénom requis'),
@@ -41,12 +42,23 @@ const jobTitleOptions = [
 
 export interface LeadCaptureStepProps {
   previewData: AxisScore[];
+  diagnosticScore: number;
+  scoreLevel: ScoreLevel;
+  context: UserContext;
   onSubmit: (data: LeadData) => void;
   onSkip?: () => void;
 }
 
-export function LeadCaptureStep({ previewData, onSubmit, onSkip }: LeadCaptureStepProps) {
+export function LeadCaptureStep({
+  previewData,
+  diagnosticScore,
+  scoreLevel,
+  context,
+  onSubmit,
+  onSkip,
+}: LeadCaptureStepProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
     register,
@@ -63,9 +75,36 @@ export function LeadCaptureStep({ previewData, onSubmit, onSkip }: LeadCaptureSt
 
   const onFormSubmit = async (data: LeadFormData) => {
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    onSubmit(data);
+    setSubmitError(null);
+
+    try {
+      // Submit to HubSpot
+      const hubspotSuccess = await submitToHubSpot({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        company: data.company,
+        jobTitle: data.jobTitle,
+        wantsCallback: data.wantsCallback,
+        diagnosticScore: diagnosticScore,
+        diagnosticLevel: scoreLevel.label,
+        siteArea: context.siteArea,
+        sector: context.sector,
+        mainConcern: context.mainConcern,
+      });
+
+      if (!hubspotSuccess) {
+        console.warn('HubSpot submission failed, but continuing to results');
+      }
+
+      // Always proceed to results, even if HubSpot fails
+      onSubmit(data);
+    } catch (error) {
+      console.error('Form submission error:', error);
+      // Still proceed to results
+      onSubmit(data);
+    }
   };
 
   return (
@@ -167,6 +206,10 @@ export function LeadCaptureStep({ previewData, onSubmit, onSkip }: LeadCaptureSt
                   />
                 </div>
 
+                {submitError && (
+                  <p className="text-sm text-danger">{submitError}</p>
+                )}
+
                 <div className="pt-4">
                   <Button
                     type="submit"
@@ -174,7 +217,7 @@ export function LeadCaptureStep({ previewData, onSubmit, onSkip }: LeadCaptureSt
                     className="w-full"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? 'Chargement...' : 'Voir mes résultats détaillés'}
+                    {isSubmitting ? 'Envoi en cours...' : 'Voir mes résultats détaillés'}
                     <ArrowRight className="w-5 h-5" />
                   </Button>
                 </div>

@@ -60,6 +60,9 @@ export function DiagnosticWizard() {
         return (
           <LeadCaptureStep
             previewData={results.axisScores}
+            diagnosticScore={results.normalizedScore}
+            scoreLevel={results.scoreLevel}
+            context={context}
             onSubmit={submitLeadData}
             onSkip={skipLeadCapture}
           />
