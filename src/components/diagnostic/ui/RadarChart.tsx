@@ -15,7 +15,7 @@ export interface SecurityRadarChartProps {
 }
 
 export function SecurityRadarChart({ data, blur = false }: SecurityRadarChartProps) {
-  // Convert scores to percentage (0% = perfect, 100% = critical)
+  // percentage: 100% = conforme (best), 0% = critique (worst)
   const chartData = data.map((d) => ({
     axis: d.axis,
     value: d.percentage,
@@ -39,13 +39,13 @@ export function SecurityRadarChart({ data, blur = false }: SecurityRadarChartPro
             tickCount={5}
             axisLine={false}
           />
-          {/* Background zones */}
+          {/* Target zone (100% = ideal) */}
           <Radar
-            name="Seuil critique"
+            name="Zone cible"
             dataKey="fullMark"
             stroke="none"
-            fill="#fee2e2"
-            fillOpacity={0.3}
+            fill="#dcfce7"
+            fillOpacity={0.4}
           />
           {/* User score */}
           <Radar
@@ -53,7 +53,7 @@ export function SecurityRadarChart({ data, blur = false }: SecurityRadarChartPro
             dataKey="value"
             stroke="#2D8B4E"
             fill="#2D8B4E"
-            fillOpacity={0.4}
+            fillOpacity={0.5}
             strokeWidth={2}
             dot={{ fill: '#2D8B4E', r: 4, strokeWidth: 0 }}
           />
@@ -64,7 +64,7 @@ export function SecurityRadarChart({ data, blur = false }: SecurityRadarChartPro
               borderRadius: '8px',
               padding: '8px 12px',
             }}
-            formatter={(value) => [`${value}%`, 'Écart']}
+            formatter={(value) => [`${value}%`, 'Conformité']}
           />
         </RechartsRadarChart>
       </ResponsiveContainer>
@@ -78,19 +78,19 @@ export function RadarChartLegend() {
     <div className="flex flex-wrap justify-center gap-4 mt-4 text-sm">
       <div className="flex items-center gap-2">
         <div className="w-3 h-3 rounded-full bg-success" />
-        <span className="text-muted">0-20% : Conforme</span>
+        <span className="text-muted">80-100% : Conforme</span>
       </div>
       <div className="flex items-center gap-2">
         <div className="w-3 h-3 rounded-full bg-info" />
-        <span className="text-muted">21-45% : À surveiller</span>
+        <span className="text-muted">55-79% : À surveiller</span>
       </div>
       <div className="flex items-center gap-2">
         <div className="w-3 h-3 rounded-full bg-warning" />
-        <span className="text-muted">46-70% : Significatif</span>
+        <span className="text-muted">30-54% : Significatif</span>
       </div>
       <div className="flex items-center gap-2">
         <div className="w-3 h-3 rounded-full bg-danger" />
-        <span className="text-muted">71-100% : Critique</span>
+        <span className="text-muted">0-29% : Critique</span>
       </div>
     </div>
   );

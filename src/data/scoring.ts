@@ -2,34 +2,35 @@ import type { ScoreLevel, Answers, AxisScore } from '@/types/diagnostic';
 import type { Question } from '@/types/diagnostic';
 import { axes } from './axes';
 
+// Score levels: 100 = Conforme (best), 0 = Critique (worst)
 export const scoreLevels: ScoreLevel[] = [
   {
-    min: 0,
-    max: 20,
+    min: 80,
+    max: 100,
     label: 'Conforme',
     color: 'success',
     description:
       'Votre installation présente un bon niveau de conformité aux exigences APSAD. Maintenez cette vigilance par une maintenance régulière.',
   },
   {
-    min: 21,
-    max: 45,
+    min: 55,
+    max: 79,
     label: 'À surveiller',
     color: 'info',
     description:
       "Des points d'amélioration existent. Une mise à niveau ciblée renforcerait significativement votre protection.",
   },
   {
-    min: 46,
-    max: 70,
+    min: 30,
+    max: 54,
     label: 'Écarts significatifs',
     color: 'warning',
     description:
       "Des écarts importants sont identifiés sur plusieurs axes. Un plan d'action structuré est recommandé.",
   },
   {
-    min: 71,
-    max: 100,
+    min: 0,
+    max: 29,
     label: 'Écarts critiques',
     color: 'danger',
     description:
@@ -63,21 +64,23 @@ export function calculateAllAxisScores(
   questions: Question[]
 ): AxisScore[] {
   return axes.map((axis) => {
-    const score = calculateAxisScore(answers, axis.id, questions);
+    const rawScore = calculateAxisScore(answers, axis.id, questions);
+    // Invert: 100% = perfect (no gaps), 0% = critical (max gaps)
+    const percentage = Math.round(100 - (rawScore / axis.maxPoints) * 100);
     return {
       axis: axis.shortName,
-      score,
+      score: rawScore,
       max: axis.maxPoints,
-      percentage: Math.round((score / axis.maxPoints) * 100),
+      percentage,
     };
   });
 }
 
-// Get color based on percentage score (0% = best, 100% = worst)
+// Get color based on percentage score (100% = best, 0% = worst)
 export function getScoreColor(percentage: number): string {
-  if (percentage <= 20) return '#22c55e'; // success
-  if (percentage <= 50) return '#3b82f6'; // info
-  if (percentage <= 75) return '#f59e0b'; // warning
+  if (percentage >= 80) return '#22c55e'; // success
+  if (percentage >= 55) return '#3b82f6'; // info
+  if (percentage >= 30) return '#f59e0b'; // warning
   return '#ef4444'; // danger
 }
 

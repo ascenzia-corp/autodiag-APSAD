@@ -117,7 +117,8 @@ export function useDiagnostic() {
   // Computed results
   const results = useMemo(() => {
     const totalScore = calculateTotalScore(state.answers, questions);
-    const normalizedScore = Math.round((totalScore / totalMaxPoints) * 100);
+    // Invert: 100 = perfect (no gaps), 0 = critical (max gaps)
+    const normalizedScore = Math.round(100 - (totalScore / totalMaxPoints) * 100);
     const axisScores = calculateAllAxisScores(state.answers, questions);
     const scoreLevel = getScoreLevel(normalizedScore);
     const recs = getRecommendations(state.answers);

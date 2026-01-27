@@ -94,7 +94,7 @@ export function ResultsStep({
                   {scoreLevel.description}
                 </p>
                 <p className="text-xs text-muted mt-3">
-                  0 = alignement fort aux standards APSAD • 100 = écart critique
+                  100 = conformité totale aux standards APSAD • 0 = écarts critiques
                 </p>
               </div>
             </div>

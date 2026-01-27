@@ -15,20 +15,21 @@ export interface AxisScoreCardProps {
 }
 
 export function AxisScoreCard({ axisScore }: AxisScoreCardProps) {
-  const { axis, score, max, percentage } = axisScore;
+  const { axis, percentage } = axisScore;
   const Icon = iconMap[axis] || Target;
 
+  // High percentage = good (green), low percentage = bad (red)
   const getColorClass = () => {
-    if (percentage <= 20) return 'text-success bg-success-light';
-    if (percentage <= 50) return 'text-info bg-info-light';
-    if (percentage <= 75) return 'text-warning bg-warning-light';
+    if (percentage >= 80) return 'text-success bg-success-light';
+    if (percentage >= 55) return 'text-info bg-info-light';
+    if (percentage >= 30) return 'text-warning bg-warning-light';
     return 'text-danger bg-danger-light';
   };
 
   const getProgressColor = () => {
-    if (percentage <= 20) return 'bg-success';
-    if (percentage <= 50) return 'bg-info';
-    if (percentage <= 75) return 'bg-warning';
+    if (percentage >= 80) return 'bg-success';
+    if (percentage >= 55) return 'bg-info';
+    if (percentage >= 30) return 'bg-warning';
     return 'bg-danger';
   };
 
@@ -49,7 +50,7 @@ export function AxisScoreCard({ axisScore }: AxisScoreCardProps) {
         <div className="flex items-center justify-between mb-1">
           <span className="font-medium text-foreground">{axis}</span>
           <span className="text-sm tabular-nums text-muted">
-            {score} / {max}
+            {percentage}%
           </span>
         </div>
         {/* Progress bar */}
