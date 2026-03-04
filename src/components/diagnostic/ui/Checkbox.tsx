@@ -1,14 +1,14 @@
-import { forwardRef, type InputHTMLAttributes } from 'react';
+import { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
 
 export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
-  label: string;
+  label: ReactNode;
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ className, label, id, ...props }, ref) => {
-    const checkboxId = id || label.toLowerCase().replace(/\s+/g, '-');
+  ({ className, label, id, name, ...props }, ref) => {
+    const checkboxId = id || name || 'checkbox';
 
     return (
       <label
@@ -24,6 +24,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             ref={ref}
             type="checkbox"
             id={checkboxId}
+            name={name}
             className="peer sr-only"
             {...props}
           />

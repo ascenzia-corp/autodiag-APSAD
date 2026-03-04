@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle, Lock, ArrowRight } from 'lucide-react';
+import { CheckCircle, ArrowRight } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -27,6 +27,9 @@ const leadSchema = z.object({
   company: z.string().min(2, 'Entreprise requise'),
   jobTitle: z.string().min(1, 'Fonction requise'),
   wantsCallback: z.boolean(),
+  rgpdConsent: z.literal(true, {
+    errorMap: () => ({ message: 'Vous devez accepter la politique de traitement des données' }),
+  }),
 });
 
 type LeadFormData = z.infer<typeof leadSchema>;
@@ -206,6 +209,36 @@ export function LeadCaptureStep({
                   />
                 </div>
 
+                <div className="pt-2">
+                  <Checkbox
+                    label={
+                      <>
+                        J'accepte que mes données personnelles, notamment mon adresse email,
+                        soient exploitées par Groupe PERIN Sécurité afin d'être contacté(e).
+                        Je confirme avoir pris connaissance de mes droits d'accès, de rectification,
+                        d'effacement, de limitation et d'opposition concernant les données me
+                        concernant, conformément à l'article 34 de la loi « Informatique et
+                        Libertés » du 6 janvier 1978 modifiée et au Règlement (UE) 2016/679 du
+                        27 avril 2016 (RGPD), applicable depuis le 25 mai 2018. Pour exercer
+                        ces droits, je peux contacter :{' '}
+                        <a
+                          href="mailto:securite@perin.fr"
+                          className="text-primary underline hover:text-primary/80"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          securite@perin.fr
+                        </a>
+                      </>
+                    }
+                    {...register('rgpdConsent')}
+                  />
+                  {errors.rgpdConsent && (
+                    <p className="text-sm text-danger mt-1 ml-8">
+                      {errors.rgpdConsent.message}
+                    </p>
+                  )}
+                </div>
+
                 {submitError && (
                   <p className="text-sm text-danger">{submitError}</p>
                 )}
@@ -222,15 +255,6 @@ export function LeadCaptureStep({
                   </Button>
                 </div>
               </form>
-
-              {/* Privacy note */}
-              <div className="flex items-start gap-2 mt-6 p-3 rounded-lg bg-background">
-                <Lock className="w-4 h-4 text-muted flex-shrink-0 mt-0.5" />
-                <p className="text-xs text-muted">
-                  Vos données sont protégées et ne seront jamais revendues.
-                  Vous pouvez vous désinscrire à tout moment.
-                </p>
-              </div>
             </Card>
 
             {/* Skip option (optional) */}
