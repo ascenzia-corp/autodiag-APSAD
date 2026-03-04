@@ -49,7 +49,6 @@ export interface LeadCaptureStepProps {
   scoreLevel: ScoreLevel;
   context: UserContext;
   onSubmit: (data: LeadData) => void;
-  onSkip?: () => void;
 }
 
 export function LeadCaptureStep({
@@ -58,7 +57,6 @@ export function LeadCaptureStep({
   scoreLevel,
   context,
   onSubmit,
-  onSkip,
 }: LeadCaptureStepProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);

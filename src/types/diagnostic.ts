@@ -55,7 +55,7 @@ export interface LeadData {
   lastName: string;
   email: string;
   phone?: string;
-  company: string;
+  company?: string;
   jobTitle: string;
   wantsCallback: boolean;
 }

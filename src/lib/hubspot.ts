@@ -9,7 +9,7 @@ export interface HubSpotFormData {
   lastName: string;
   email: string;
   phone?: string;
-  company: string;
+  company?: string;
   jobTitle: string;
   wantsCallback: boolean;
   diagnosticScore: number;
@@ -30,7 +30,6 @@ export async function submitToHubSpot(data: HubSpotFormData): Promise<boolean> {
     { name: 'firstname', value: data.firstName },
     { name: 'lastname', value: data.lastName },
     { name: 'email', value: data.email },
-    { name: 'company', value: data.company },
     { name: 'jobtitle', value: data.jobTitle },
     // Custom properties - make sure these exist in HubSpot
     { name: 'diagnostic_score', value: String(data.diagnosticScore) },
@@ -39,6 +38,9 @@ export async function submitToHubSpot(data: HubSpotFormData): Promise<boolean> {
   ];
 
   // Add optional fields
+  if (data.company) {
+    fields.push({ name: 'company', value: data.company });
+  }
   if (data.phone) {
     fields.push({ name: 'phone', value: data.phone });
   }
