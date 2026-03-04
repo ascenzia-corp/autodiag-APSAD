@@ -27,8 +27,8 @@ const leadSchema = z.object({
   company: z.string().min(2, 'Entreprise requise'),
   jobTitle: z.string().min(1, 'Fonction requise'),
   wantsCallback: z.boolean(),
-  rgpdConsent: z.literal(true, {
-    errorMap: () => ({ message: 'Vous devez accepter la politique de traitement des données' }),
+  rgpdConsent: z.boolean().refine((val) => val === true, {
+    message: 'Vous devez accepter la politique de traitement des données',
   }),
 });
 
