@@ -25,7 +25,6 @@ export function DiagnosticWizard() {
     answerQuestion,
     goToPreviousQuestion,
     submitLeadData,
-    skipLeadCapture,
     restart,
   } = useDiagnostic();
 
@@ -64,7 +63,6 @@ export function DiagnosticWizard() {
             scoreLevel={results.scoreLevel}
             context={context}
             onSubmit={submitLeadData}
-            onSkip={skipLeadCapture}
           />
         );
 
