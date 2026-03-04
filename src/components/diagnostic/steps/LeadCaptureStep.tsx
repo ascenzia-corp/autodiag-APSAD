@@ -24,7 +24,7 @@ const leadSchema = z.object({
       'Merci d\'utiliser votre email professionnel'
     ),
   phone: z.string().optional(),
-  company: z.string().min(2, 'Entreprise requise'),
+  company: z.string().optional(),
   jobTitle: z.string().min(1, 'Fonction requise'),
   wantsCallback: z.boolean(),
   rgpdConsent: z.boolean().refine((val) => val === true, {
@@ -187,7 +187,6 @@ export function LeadCaptureStep({
 
                 <Input
                   label="Entreprise"
-                  required
                   {...register('company')}
                   error={errors.company?.message}
                 />
@@ -212,7 +211,7 @@ export function LeadCaptureStep({
                 <div className="pt-2">
                   <Checkbox
                     label={
-                      <>
+                      <span className="text-xs text-gray-400">
                         J'accepte que mes données personnelles, notamment mon adresse email,
                         soient exploitées par Groupe PERIN Sécurité afin d'être contacté(e).
                         Je confirme avoir pris connaissance de mes droits d'accès, de rectification,
@@ -228,7 +227,7 @@ export function LeadCaptureStep({
                         >
                           securite@perin.fr
                         </a>
-                      </>
+                      </span>
                     }
                     {...register('rgpdConsent')}
                   />
@@ -257,18 +256,6 @@ export function LeadCaptureStep({
               </form>
             </Card>
 
-            {/* Skip option (optional) */}
-            {onSkip && (
-              <div className="text-center mt-4">
-                <button
-                  type="button"
-                  onClick={onSkip}
-                  className="text-sm text-muted hover:text-foreground underline"
-                >
-                  Voir les résultats sans renseigner mes coordonnées
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>
